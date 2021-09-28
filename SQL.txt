@@ -1,0 +1,64 @@
+CREATE DATABASE storemanagementsystem;
+
+USE storemanagementsystem;
+
+CREATE TABLE supplier (
+    supID INT AUTO_INCREMENT PRIMARY KEY,
+    supCompany VARCHAR(255) NOT NULL,
+    agentName VARCHAR(255),
+    supContact INT NOT NULL,
+    supEmail VARCHAR(255),
+    regNo VARCHAR(255) 
+);
+
+CREATE TABLE inventory (
+    prodID INT AUTO_INCREMENT PRIMARY KEY,
+    prodName VARCHAR(255) NOT NULL,
+    prodCategory VARCHAR(255),
+    supID INT NOT NULL,
+    prodQty int NOT NULL,
+    buyingPrice FLOAT NOT NULL,
+    markup FLOAT NOT NULL,
+    sellingPrice FLOAT NOT NULL,
+    FOREIGN KEY (supID) REFERENCES supplier(supID)
+);
+
+CREATE TABLE sales (
+    receiptNo INT,
+    prodID INT NOT NULL,
+    discountPer FLOAT,
+    discountAmt FLOAT,
+    total FLOAT NOT NULL,
+    dateOfSale TIMESTAMP NOT NULL,
+    FOREIGN KEY (prodID) REFERENCES inventory(prodID)
+);
+
+CREATE TABLE users (
+    role VARCHAR(10) NOT NULL,
+    userID INT AUTO_INCREMENT PRIMARY KEY,
+    userPassword INT NOT NULL,
+    userName VARCHAR(255) NOT NULL,
+    userEmail VARCHAR(255) NOT NULL,
+    userContact INT NOT NULL,
+    userAddress VARCHAR(255),
+    userJoinedDate TIMESTAMP NOT NULL
+);
+
+CREATE TABLE inventorySold (
+    prodID INT,
+    month DATE,
+    unitsSold INT,
+    PRIMARY KEY (prodID, month),
+    FOREIGN KEY (prodID) REFERENCES inventory(prodID)
+);
+
+CREATE TABLE monthlyStatistics (
+    month DATE PRIMARY KEY,
+    totalSales FLOAT,
+    totalProfit FLOAT,
+    totalDiscounts FLOAT,
+    mostSoldProd INT,
+    leastSoldProd INT,
+    FOREIGN KEY (mostSoldProd) REFERENCES inventory(prodID),
+    FOREIGN KEY (leastSoldProd) REFERENCES inventory(prodID)
+);
